@@ -1,0 +1,281 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "0x.rxdri on DC"
+screenGui.ResetOnSpawn = false
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 350, 0, 400)
+mainFrame.Position = UDim2.new(0.5, -175, 0.5, -200)
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = mainFrame
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "Title"
+titleLabel.Size = UDim2.new(1, 0, 0, 50)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+titleLabel.Text = "Enter Pet Name to Spawn"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 18
+titleLabel.Parent = mainFrame
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 12)
+titleCorner.Parent = titleLabel
+local attributesFrame = Instance.new("Frame")
+attributesFrame.Name = "AttributesFrame"
+attributesFrame.Size = UDim2.new(1, -20, 0, 60)
+attributesFrame.Position = UDim2.new(0, 10, 0, 60)
+attributesFrame.BackgroundTransparency = 1
+attributesFrame.Parent = mainFrame
+local attributeNames = {"F", "R", "N", "M"}
+local attributeDescriptions = {"Fly", "Ride", "Neon", "Mega Neon"}
+local attributeColors = {
+    Color3.fromRGB(0, 170, 255),    -- Fly: Blue
+    Color3.fromRGB(255, 170, 0),    -- Ride: Orange
+    Color3.fromRGB(0, 255, 170),    -- Neon: Teal
+    Color3.fromRGB(255, 85, 255)    -- Mega Neon: Pink
+}
+
+for i = 1, 4 do
+    local attributeFrame = Instance.new("Frame")
+    attributeFrame.Name = attributeNames[i] .. "Attribute"
+    attributeFrame.Size = UDim2.new(0.2, -10, 1, 0)
+    attributeFrame.Position = UDim2.new((i-1) * 0.25, 10, 0, 0)
+    attributeFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    attributeFrame.Parent = attributesFrame
+    
+    local attributeCorner = Instance.new("UICorner")
+    attributeCorner.CornerRadius = UDim.new(0, 8)
+    attributeCorner.Parent = attributeFrame
+    
+    local attributeLabel = Instance.new("TextLabel")
+    attributeLabel.Name = "Label"
+    attributeLabel.Size = UDim2.new(1, 0, 0.5, 0)
+    attributeLabel.Position = UDim2.new(0, 0, 0, 0)
+    attributeLabel.BackgroundTransparency = 1
+    attributeLabel.Text = attributeNames[i]
+    attributeLabel.TextColor3 = attributeColors[i]
+    attributeLabel.Font = Enum.Font.GothamBlack
+    attributeLabel.TextSize = 24
+    attributeLabel.Parent = attributeFrame
+    
+    local descLabel = Instance.new("TextLabel")
+    descLabel.Name = "Description"
+    descLabel.Size = UDim2.new(1, 0, 0.5, 0)
+    descLabel.Position = UDim2.new(0, 0, 0.5, 0)
+    descLabel.BackgroundTransparency = 1
+    descLabel.Text = attributeDescriptions[i]
+    descLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    descLabel.Font = Enum.Font.Gotham
+    descLabel.TextSize = 10
+    descLabel.Parent = attributeFrame
+end
+
+-- Mega Neon Fly Ride Display
+local megaDisplay = Instance.new("Frame")
+megaDisplay.Name = "MegaDisplay"
+megaDisplay.Size = UDim2.new(1, -20, 0, 40)
+megaDisplay.Position = UDim2.new(0, 10, 0, 130)
+megaDisplay.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+megaDisplay.Parent = mainFrame
+
+local megaCorner = Instance.new("UICorner")
+megaCorner.CornerRadius = UDim.new(0, 8)
+megaCorner.Parent = megaDisplay
+
+local megaLabel = Instance.new("TextLabel")
+megaLabel.Name = "MegaLabel"
+megaLabel.Size = UDim2.new(1, 0, 1, 0)
+megaLabel.BackgroundTransparency = 1
+megaLabel.Text = "Mega Neon Fly Ride"
+megaLabel.TextColor3 = Color3.fromRGB(255, 85, 255)
+megaLabel.Font = Enum.Font.GothamBold
+megaLabel.TextSize = 16
+megaLabel.Parent = megaDisplay
+
+-- Input Field
+local inputFrame = Instance.new("Frame")
+inputFrame.Name = "InputFrame"
+inputFrame.Size = UDim2.new(1, -20, 0, 40)
+inputFrame.Position = UDim2.new(0, 10, 0, 180)
+inputFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+inputFrame.Parent = mainFrame
+
+local inputCorner = Instance.new("UICorner")
+inputCorner.CornerRadius = UDim.new(0, 8)
+inputCorner.Parent = inputFrame
+
+local textBox = Instance.new("TextBox")
+textBox.Name = "PetNameInput"
+textBox.Size = UDim2.new(1, -20, 1, -10)
+textBox.Position = UDim2.new(0, 10, 0, 5)
+textBox.BackgroundTransparency = 1
+textBox.Text = "Pet Name"
+textBox.TextColor3 = Color3.fromRGB(200, 200, 200)
+textBox.Font = Enum.Font.Gotham
+textBox.TextSize = 14
+textBox.PlaceholderText = "Enter pet name..."
+textBox.ClearTextOnFocus = false
+textBox.Parent = inputFrame
+
+-- Spawn Buttons
+local spawnButtonsFrame = Instance.new("Frame")
+spawnButtonsFrame.Name = "SpawnButtons"
+spawnButtonsFrame.Size = UDim2.new(1, -20, 0, 120)
+spawnButtonsFrame.Position = UDim2.new(0, 10, 0, 240)
+spawnButtonsFrame.BackgroundTransparency = 1
+spawnButtonsFrame.Parent = mainFrame
+
+-- Spawn High Tier Button
+local spawnHighButton = Instance.new("TextButton")
+spawnHighButton.Name = "SpawnHighTier"
+spawnHighButton.Size = UDim2.new(1, 0, 0, 50)
+spawnHighButton.Position = UDim2.new(0, 0, 0, 0)
+spawnHighButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+spawnHighButton.Text = "Spawn High Tier"
+spawnHighButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+spawnHighButton.Font = Enum.Font.GothamBold
+spawnHighButton.TextSize = 16
+spawnHighButton.Parent = spawnButtonsFrame
+
+local spawnHighCorner = Instance.new("UICorner")
+spawnHighCorner.CornerRadius = UDim.new(0, 8)
+spawnHighCorner.Parent = spawnHighButton
+
+-- Spawn Pet Button
+local spawnPetButton = Instance.new("TextButton")
+spawnPetButton.Name = "SpawnPet"
+spawnPetButton.Size = UDim2.new(1, 0, 0, 50)
+spawnPetButton.Position = UDim2.new(0, 0, 0, 70)
+spawnPetButton.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+spawnPetButton.Text = "Spawn Pet"
+spawnPetButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+spawnPetButton.Font = Enum.Font.GothamBold
+spawnPetButton.TextSize = 16
+spawnPetButton.Parent = spawnButtonsFrame
+
+local spawnPetCorner = Instance.new("UICorner")
+spawnPetCorner.CornerRadius = UDim.new(0, 8)
+spawnPetCorner.Parent = spawnPetButton
+
+-- Add GUI to player
+screenGui.Parent = playerGui
+
+-- Animation function
+function animateButton(button)
+    local originalSize = button.Size
+    local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    
+    local scaleUp = TweenService:Create(button, tweenInfo, {
+        Size = originalSize + UDim2.new(0, -5, 0, -5)
+    })
+    
+    local scaleDown = TweenService:Create(button, tweenInfo, {
+        Size = originalSize
+    })
+    
+    scaleUp:Play()
+    scaleUp.Completed:Connect(function()
+        scaleDown:Play()
+    end)
+end
+
+-- Pet spawning functions (example - you'll need to connect these to your game)
+function spawnPet(petName, isHighTier)
+    -- This function would connect to your actual pet spawning system
+    print("Spawning pet:", petName)
+    print("High Tier:", isHighTier)
+    
+    -- Example: You would have a RemoteEvent or system to spawn pets
+    -- local petSpawnEvent = ReplicatedStorage:WaitForChild("SpawnPet")
+    -- petSpawnEvent:FireServer(petName, isHighTier)
+    
+    -- Show feedback
+    textBox.Text = "Spawning " .. petName .. "..."
+    
+    -- Reset after delay
+    wait(1)
+    textBox.Text = ""
+end
+
+-- Button click handlers
+spawnHighButton.MouseButton1Click:Connect(function()
+    animateButton(spawnHighButton)
+    
+    local petName = textBox.Text
+    if petName and petName ~= "" and petName ~= "Pet Name" then
+        spawnPet(petName, true)
+    else
+        textBox.Text = "Enter a pet name!"
+        wait(1)
+        textBox.Text = ""
+    end
+end)
+
+spawnPetButton.MouseButton1Click:Connect(function()
+    animateButton(spawnPetButton)
+    
+    local petName = textBox.Text
+    if petName and petName ~= "" and petName ~= "Pet Name" then
+        spawnPet(petName, false)
+    else
+        textBox.Text = "Enter a pet name!"
+        wait(1)
+        textBox.Text = ""
+    end
+end)
+
+-- TextBox focus events
+textBox.Focused:Connect(function()
+    if textBox.Text == "Pet Name" then
+        textBox.Text = ""
+        textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    end
+end)
+
+textBox.FocusLost:Connect(function()
+    if textBox.Text == "" then
+        textBox.Text = "Pet Name"
+        textBox.TextColor3 = Color3.fromRGB(200, 200, 200)
+    end
+end)
+
+-- Attribute toggle functionality (optional)
+local attributeStates = {
+    Fly = false,
+    Ride = false,
+    Neon = false,
+    MegaNeon = false
+}
+
+-- You can add functionality to toggle attributes on/off by clicking them
+for i, attribute in pairs(attributeNames) do
+    local attributeFrame = attributesFrame:FindFirstChild(attribute .. "Attribute")
+    if attributeFrame then
+        attributeFrame.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                attributeStates[attributeDescriptions[i]] = not attributeStates[attributeDescriptions[i]]
+                
+                local label = attributeFrame:FindFirstChild("Label")
+                if attributeStates[attributeDescriptions[i]] then
+                    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    attributeFrame.BackgroundColor3 = attributeColors[i]
+                else
+                    label.TextColor3 = attributeColors[i]
+                    attributeFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                end
+            end
+        end)
+    end
+end
+
+print("Pet Spawner GUI Loaded!")
